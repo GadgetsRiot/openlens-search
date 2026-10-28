@@ -84,3 +84,141 @@ clear.addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>OpenLens Search | Creator Protection</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#f3f6ff;font-family:system-ui,sans-serif}
+header{text-align:center;padding:25px 16px 12px}
+.logo{font-size:35px;font-weight:850;letter-spacing:-1px}
+.logo span{color:#76e4c3}
+p{color:#b3bfd2;line-height:1.55}
+main{max-width:650px;margin:auto;padding:14px}
+.panel{background:#151f32;border:1px solid #293750;border-radius:18px;padding:19px;margin-bottom:15px}
+h2{font-size:19px;margin:0 0 10px}
+.upload{display:block;border:2px dashed #536581;border-radius:14px;padding:22px 12px;text-align:center;cursor:pointer}
+input[type=file]{width:100%;margin-top:12px}
+#preview{display:none;width:100%;max-height:300px;object-fit:contain;margin-top:15px;border-radius:12px;background:#080d17}
+button,.link{display:block;width:100%;padding:13px;border:0;border-radius:11px;margin-top:10px;font-size:15px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer}
+button{background:#76e4c3;color:#092019}
+.link{background:#24334b;border:1px solid #394b67;color:#f3f6ff}
+button:disabled{opacity:.4}
+.check{display:flex;gap:10px;align-items:flex-start;margin:15px 0;color:#d5deec;line-height:1.5;font-size:14px}
+.check input{margin-top:5px;flex-shrink:0}
+.notice{font-size:13px;color:#aab7cc}
+#status{font-size:13px;color:#aab7cc}
+li{color:#d5deec;line-height:1.6;margin-bottom:7px}
+footer{text-align:center;color:#91a0b8;font-size:12px;padding:12px 18px 28px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">Open<span>Lens</span></div>
+<p>Reverse-image search and creator repost discovery</p>
+</header>
+<main>
+<section class="panel">
+<h2>1. Select your image</h2>
+<p>Start with an image you own or are authorized to investigate. Preview it here before deciding whether to use an external service.</p>
+<label class="upload" for="photo">
+<strong>＋ Choose an image</strong><br>
+<span class="notice">Select a photo from your phone</span>
+</label>
+<input id="photo" type="file" accept="image/*">
+<img id="preview" alt="Selected image preview">
+<button id="clear" hidden>Remove image</button>
+<p id="status" aria-live="polite">No image selected. Your photo is not uploaded by this page.</p>
+</section>
+
+<section class="panel">
+<h2>2. Choose a search service</h2>
+<p>Open a service to look for visually similar images or public webpages. You may need to upload your image again on that service.</p>
+<label class="check">
+<input id="consent" type="checkbox">
+<span>I understand that an external service may receive my image or search activity if I submit it there. I choose when to share it.</span>
+</label>
+<p class="notice">OpenLens does not automatically send your selected image to these services. Check each service's privacy terms before submitting sensitive content.</p>
+<a class="link external" href="https://lens.google.com/">Google Lens ↗</a>
+<a class="link external" href="https://images.google.com/">Google Images ↗</a>
+<a class="link external" href="https://www.bing.com/visualsearch">Bing Visual Search ↗</a>
+<a class="link external" href="https://tineye.com/">TinEye ↗</a>
+<p class="notice">External services set their own rules and results. Adult content may be restricted, and no service can guarantee finding every repost.</p>
+</section>
+
+<section class="panel">
+<h2>3. If you find a possible repost</h2>
+<ul>
+<li>Record the webpage address and date you found it.</li>
+<li>Keep relevant evidence securely, without redistributing intimate images.</li>
+<li>Check the website's reporting process and request removal where appropriate.</li>
+<li>If intimate imagery was shared without consent, use the platform's non-consensual intimate imagery reporting option when available.</li>
+</ul>
+</section>
+
+<section class="panel">
+<h2>4. What's coming next</h2>
+<ul>
+<li>Local duplicate-image comparison</li>
+<li>Perceptual hashes for resized or compressed copies</li>
+<li>Tools to organize found URLs and report status</li>
+<li>More privacy controls</li>
+</ul>
+<p class="notice">These matching and tracking features are planned, not implemented in this version. OpenLens currently provides image preview and external search shortcuts.</p>
+</section>
+</main>
+<footer>OpenLens Search · Powered by GadgetsRiot · Privacy-conscious by design</footer>
+<script>
+const input=document.getElementById('photo');
+const preview=document.getElementById('preview');
+const clear=document.getElementById('clear');
+const status=document.getElementById('status');
+const consent=document.getElementById('consent');
+let objectUrl=null;
+
+input.addEventListener('change',()=>{
+ const file=input.files&&input.files[0];
+ if(!file)return;
+ if(!file.type.startsWith('image/')){
+  status.textContent='Please choose a valid image.';
+  input.value='';
+  return;
+ }
+ if(objectUrl)URL.revokeObjectURL(objectUrl);
+ objectUrl=URL.createObjectURL(file);
+ preview.src=objectUrl;
+ preview.style.display='block';
+ clear.hidden=false;
+ status.textContent='Selected: '+file.name+'. The image stays in this page unless you submit it elsewhere.';
+});
+
+clear.addEventListener('click',()=>{
+ input.value='';
+ preview.removeAttribute('src');
+ preview.style.display='none';
+ clear.hidden=true;
+ if(objectUrl)URL.revokeObjectURL(objectUrl);
+ objectUrl=null;
+ status.textContent='No image selected.';
+});
+
+document.querySelectorAll('.external').forEach(link=>{
+ link.addEventListener('click',event=>{
+  event.preventDefault();
+  if(!consent.checked){
+   status.textContent='Please confirm the external-sharing notice before continuing.';
+   consent.focus();
+   return;
+  }
+  window.open(link.href,'_blank','noopener,noreferrer');
+ });
+});
+</script>
+</body>
+</html>
