@@ -52,9 +52,13 @@ footer{text-align:center;color:#91a0b8;font-size:12px;padding:20px}
 <input id="consent" type="checkbox">
 <span>I understand the external service may receive the image if I upload it there, and I choose to continue.</span>
 </label>
-<button class="search" data-url="https://lens.google.com/">Continue to Google Lens</button>
-<button class="search secondary" data-url="https://www.bing.com/visualsearch">Continue to Bing Visual Search</button>
-<button class="search secondary" data-url="https://tineye.com/">Continue to TinEye</button>
+<button class="search" data-url="https://lens.google.com/">Open Google Lens — upload image there</button>
+<button class="search secondary" data-url="https://www.bing.com/visualsearch">Open Bing Visual Search — upload image there</button>
+<button class="search secondary" data-url="https://tineye.com/">Open TinEye — upload image there</button>
+<button class="search secondary" data-url="https://yandex.com/images/">Open Yandex Images — upload image there</button>
+<button class="search secondary" data-url="https://saucenao.com/">Open SauceNAO — upload image there</button>
+<button class="search secondary" data-url="https://iqdb.org/">Open IQDB — upload image there</button>
+<p class="notice">Deep-search tip: run the same image through more than one service, crop to a distinctive detail if needed, and record each promising result URL in the tracker below. No single service indexes the whole web.</p>
 <p id="searchStatus" class="notice" aria-live="polite">Choose an image first, then select a search service.</p>
 <p class="notice">These services have their own policies and limitations. Adult content may be restricted. OpenLens cannot guarantee that a match will be found.</p>
 </section>
@@ -143,8 +147,9 @@ document.querySelectorAll('.search').forEach(button=>{
    $('consent').focus();
    return;
   }
-  $('searchStatus').textContent='Opening the service. Follow its instructions to upload the image there if you choose.';
-  window.open(button.dataset.url,'_blank','noopener,noreferrer');
+  $('searchStatus').textContent='Opening the selected service. Your image is not transferred automatically; upload it on that service if you choose.';
+  const opened=window.open(button.dataset.url,'_blank','noopener,noreferrer');
+  if(!opened){$('searchStatus').textContent='Your browser blocked the new tab. Allow pop-ups for this page or open the service using its link.';}
  });
 });
 
