@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>OpenLens Search</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#f3f6ff;font-family:system-ui,sans-serif}
+header{text-align:center;padding:28px 16px}
+.logo{font-size:36px;font-weight:850}
+.logo span{color:#76e4c3}
+p{color:#aab7cc;line-height:1.5}
+main{max-width:620px;margin:auto;padding:14px}
+.panel{background:#151f32;border:1px solid #293750;border-radius:18px;padding:20px;margin-bottom:16px}
+h2{font-size:19px;margin-top:0}
+.upload{display:block;border:2px dashed #536581;border-radius:14px;padding:25px 12px;text-align:center;cursor:pointer}
+input[type=file]{width:100%;margin-top:12px}
+#preview{display:none;width:100%;max-height:320px;object-fit:contain;margin-top:15px;border-radius:12px}
+a{display:block;background:#24334b;color:white;text-decoration:none;text-align:center;padding:14px;border-radius:10px;margin-top:10px;font-weight:bold}
+button{padding:12px;border:0;border-radius:10px;background:#76e4c3;color:#092019;font-weight:bold;margin-top:12px}
+small{color:#aab7cc}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">Open<span>Lens</span></div>
+<p>One image. More ways to find it online.</p>
+</header>
+<main>
+<section class="panel">
+<h2>1. Choose an image</h2>
+<label class="upload" for="photo"><strong>＋ Upload a photo</strong><p>Choose an image from your phone</p></label>
+<input id="photo" type="file" accept="image/*">
+<img id="preview" alt="Selected image preview">
+<button id="clear" hidden>Remove image</button>
+<p id="status">Your image is previewed on this page. It is not automatically uploaded to search services.</p>
+</section>
+<section class="panel">
+<h2>2. Search the web</h2>
+<p>Open a search service and follow its instructions to submit your image.</p>
+<a href="https://lens.google.com/" target="_blank" rel="noopener">Google Lens ↗</a>
+<a href="https://images.google.com/" target="_blank" rel="noopener">Google Images ↗</a>
+<a href="https://www.bing.com/visualsearch" target="_blank" rel="noopener">Bing Visual Search ↗</a>
+<a href="https://tineye.com/" target="_blank" rel="noopener">TinEye ↗</a>
+</section>
+<section class="panel">
+<h2>3. Planned features</h2>
+<p>• Local duplicate-photo detection</p>
+<p>• Perceptual image matching</p>
+<p>• Visual similarity tools</p>
+<p>• Installable mobile website</p>
+<small>This starter version provides external search links. The matching engine is not built yet.</small>
+</section>
+</main>
+<script>
+const input=document.getElementById('photo');
+const preview=document.getElementById('preview');
+const clear=document.getElementById('clear');
+const status=document.getElementById('status');
+let objectUrl;
+input.addEventListener('change',()=>{
+ const file=input.files&&input.files[0];
+ if(!file)return;
+ if(!file.type.startsWith('image/')){status.textContent='Please choose an image file.';return;}
+ if(objectUrl)URL.revokeObjectURL(objectUrl);
+ objectUrl=URL.createObjectURL(file);
+ preview.src=objectUrl;
+ preview.style.display='block';
+ clear.hidden=false;
+ status.textContent='Selected: '+file.name+'. Choose a search service above.';
+});
+clear.addEventListener('click',()=>{
+ input.value='';
+ preview.removeAttribute('src');
+ preview.style.display='none';
+ clear.hidden=true;
+ if(objectUrl)URL.revokeObjectURL(objectUrl);
+ objectUrl=null;
+ status.textContent='Choose an image to get started.';
+});
+</script>
+</body>
+</html>
