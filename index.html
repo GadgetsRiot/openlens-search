@@ -203,7 +203,14 @@ $('buildSearchPlan').addEventListener('click',()=>{
  links.push({label:'Search the web with Bing',url:'https://www.bing.com/search?q='+encodeURIComponent(googleQuery)});
  if(type==='product') links.push({label:'Search product photos with Google Images',url:'https://www.google.com/search?tbm=isch&q='+encodeURIComponent(googleQuery)});
  if(type==='creator' && site) links.push({label:'Search Google for this site and clues',url:'https://www.google.com/search?q='+encodeURIComponent('site:'+site+' '+query)});
- const intro=document.createElement('p');intro.className='notice';intro.textContent='Review each query before opening it. Links send the displayed search terms to the selected provider; they do not upload your image.';output.append(intro);
+ const intro=document.createElement('p');intro.className='notice';
+ intro.textContent='Review each query before opening it. Links send the displayed search terms to the selected provider; they do not upload your image.';
+ output.append(intro);
+ if($('originalStatus').value==='yes'){
+  const tip=document.createElement('p');tip.className='notice';
+  tip.textContent='You have the original file: consider also using the reverse-image search options above, which may find visual matches that text searches miss.';
+  output.append(tip);
+ }
  links.forEach(item=>{
   const a=document.createElement('a');a.className='resultLink';a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=item.label;output.append(a);
  });
