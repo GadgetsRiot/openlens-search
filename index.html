@@ -24,6 +24,7 @@ button{background:#76e4c3;color:#092019}.secondary,.link{background:#24334b;colo
 .check input{width:auto;margin-top:5px}
 .notice{font-size:13px;color:#aab7cc}
 .entry{border-top:1px solid #394b67;padding:12px 0;overflow-wrap:anywhere}
+.resultLink{display:block;background:#24334b;color:#f3f6ff;border:1px solid #394b67;border-radius:10px;padding:12px;margin-top:8px;text-decoration:none;font-weight:700}.resultLink:focus,button:focus,input:focus,select:focus,textarea:focus{outline:2px solid #76e4c3;outline-offset:2px}
 .entry button{margin-top:7px}
 footer{text-align:center;color:#91a0b8;font-size:12px;padding:20px}
 </style>
@@ -59,7 +60,33 @@ footer{text-align:center;color:#91a0b8;font-size:12px;padding:20px}
 </section>
 
 <section class="panel">
-<h2>3. Repost investigation tracker</h2>
+<h2>3. Low-information investigation assistant</h2>
+<p>Build focused search links from a few clues when you don't have the original file handy. This does not search the whole internet automatically or identify people.</p>
+<label for="investigationType">What are you investigating?</label>
+<select id="investigationType">
+<option value="creator">My own intimate content or an unauthorized repost</option>
+<option value="product">Stolen product photos or copied listings</option>
+<option value="media">Other media I own or am authorized to investigate</option>
+</select>
+<label for="originalStatus">Do you have the original file?</label>
+<select id="originalStatus">
+<option value="no">No / not available right now</option>
+<option value="yes">Yes — I can use reverse-image search above too</option>
+</select>
+<label for="timeClue">Approximate date or period (optional)</label>
+<input id="timeClue" type="text" maxlength="60" placeholder="e.g. summer 2025 or March 2026">
+<label for="siteClue">Site or platform (optional)</label>
+<input id="siteClue" type="text" maxlength="80" placeholder="e.g. Reddit, a forum, marketplace name">
+<label for="keywordClue">Public username or non-sensitive keywords (optional)</label>
+<input id="keywordClue" type="text" maxlength="100" placeholder="Only clues you're comfortable sending to a search provider">
+<label class="check"><input id="queryConsent" type="checkbox"><span>I understand that opening a search link sends the generated query clues to that external search provider.</span></label>
+<button id="buildSearchPlan">Build search links</button>
+<p class="notice">Do not enter passwords, exact addresses, private/intimate descriptions, or another person's sensitive identifying details. Leave any field blank if unsure. Search providers may log queries, and results may be incomplete.</p>
+<div id="searchPlan" aria-live="polite"></div>
+</section>
+
+<section class="panel">
+<h2>4. Repost investigation tracker</h2>
 <p>Record webpages where you find possible copies. Entries are saved only in this browser on this device; clearing browser data may erase them.</p>
 <input id="sourceUrl" type="url" placeholder="URL of the possible repost">
 <input id="foundDate" type="date" aria-label="Date found">
@@ -152,6 +179,34 @@ $('saveCase').addEventListener('click',()=>{
   localStorage.setItem('openlensCases',JSON.stringify(entries));
   $('sourceUrl').value='';$('notes').value='';renderEntries();
  }catch(e){alert('Browser storage is unavailable or full. Your entry was not saved.');}
+});
+$('buildSearchPlan').addEventListener('click',()=>{
+ const output=$('searchPlan');
+ output.replaceChildren();
+ if(!$('queryConsent').checked){
+  const msg=document.createElement('p');msg.className='notice';msg.textContent='Please confirm you understand the query will be sent to the external search provider.';output.append(msg);$('queryConsent').focus();return;
+ }
+ const type=$('investigationType').value;
+ const site=$('siteClue').value.trim().replace(/^https?:\/\//i,'').replace(/[/?#].*$/,'');
+ const keyword=$('keywordClue').value.trim();
+ const period=$('timeClue').value.trim();
+ const terms=[];
+ if(keyword)terms.push(keyword);
+ if(period)terms.push(period);
+ if(type==='product')terms.push('"product photo" OR listing');
+ else if(type==='creator')terms.push('reposted content');
+ else terms.push('unauthorized copy');
+ const query=terms.join(' ');
+ const links=[];
+ const googleQuery=(site?'site:'+site+' ':'')+query;
+ links.push({label:'Search the web with Google',url:'https://www.google.com/search?q='+encodeURIComponent(googleQuery)});
+ links.push({label:'Search the web with Bing',url:'https://www.bing.com/search?q='+encodeURIComponent(googleQuery)});
+ if(type==='product') links.push({label:'Search product photos with Google Images',url:'https://www.google.com/search?tbm=isch&q='+encodeURIComponent(googleQuery)});
+ if(type==='creator' && site) links.push({label:'Search Google for this site and clues',url:'https://www.google.com/search?q='+encodeURIComponent('site:'+site+' '+query)});
+ const intro=document.createElement('p');intro.className='notice';intro.textContent='Review each query before opening it. Links send the displayed search terms to the selected provider; they do not upload your image.';output.append(intro);
+ links.forEach(item=>{
+  const a=document.createElement('a');a.className='resultLink';a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=item.label;output.append(a);
+ });
 });
 renderEntries();
 </script>
