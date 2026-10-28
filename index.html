@@ -9,216 +9,151 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0b1120;color:#f3f6ff;font-family:system-ui,sans-serif}
-header{text-align:center;padding:28px 16px}
-.logo{font-size:36px;font-weight:850}
-.logo span{color:#76e4c3}
-p{color:#aab7cc;line-height:1.5}
-main{max-width:620px;margin:auto;padding:14px}
-.panel{background:#151f32;border:1px solid #293750;border-radius:18px;padding:20px;margin-bottom:16px}
-h2{font-size:19px;margin-top:0}
-.upload{display:block;border:2px dashed #536581;border-radius:14px;padding:25px 12px;text-align:center;cursor:pointer}
-input[type=file]{width:100%;margin-top:12px}
-#preview{display:none;width:100%;max-height:320px;object-fit:contain;margin-top:15px;border-radius:12px}
-a{display:block;background:#24334b;color:white;text-decoration:none;text-align:center;padding:14px;border-radius:10px;margin-top:10px;font-weight:bold}
-button{padding:12px;border:0;border-radius:10px;background:#76e4c3;color:#092019;font-weight:bold;margin-top:12px}
-small{color:#aab7cc}
-</style>
-</head>
-<body>
-<header>
-<div class="logo">Open<span>Lens</span></div>
-<p>One image. More ways to find it online.</p>
-</header>
-<main>
-<section class="panel">
-<h2>1. Choose an image</h2>
-<label class="upload" for="photo"><strong>＋ Upload a photo</strong><p>Choose an image from your phone</p></label>
-<input id="photo" type="file" accept="image/*">
-<img id="preview" alt="Selected image preview">
-<button id="clear" hidden>Remove image</button>
-<p id="status">Your image is previewed on this page. It is not automatically uploaded to search services.</p>
-</section>
-<section class="panel">
-<h2>2. Search the web</h2>
-<p>Open a search service and follow its instructions to submit your image.</p>
-<a href="https://lens.google.com/" target="_blank" rel="noopener">Google Lens ↗</a>
-<a href="https://images.google.com/" target="_blank" rel="noopener">Google Images ↗</a>
-<a href="https://www.bing.com/visualsearch" target="_blank" rel="noopener">Bing Visual Search ↗</a>
-<a href="https://tineye.com/" target="_blank" rel="noopener">TinEye ↗</a>
-</section>
-<section class="panel">
-<h2>3. Planned features</h2>
-<p>• Local duplicate-photo detection</p>
-<p>• Perceptual image matching</p>
-<p>• Visual similarity tools</p>
-<p>• Installable mobile website</p>
-<small>This starter version provides external search links. The matching engine is not built yet.</small>
-</section>
-</main>
-<script>
-const input=document.getElementById('photo');
-const preview=document.getElementById('preview');
-const clear=document.getElementById('clear');
-const status=document.getElementById('status');
-let objectUrl;
-input.addEventListener('change',()=>{
- const file=input.files&&input.files[0];
- if(!file)return;
- if(!file.type.startsWith('image/')){status.textContent='Please choose an image file.';return;}
- if(objectUrl)URL.revokeObjectURL(objectUrl);
- objectUrl=URL.createObjectURL(file);
- preview.src=objectUrl;
- preview.style.display='block';
- clear.hidden=false;
- status.textContent='Selected: '+file.name+'. Choose a search service above.';
-});
-clear.addEventListener('click',()=>{
- input.value='';
- preview.removeAttribute('src');
- preview.style.display='none';
- clear.hidden=true;
- if(objectUrl)URL.revokeObjectURL(objectUrl);
- objectUrl=null;
- status.textContent='Choose an image to get started.';
-});
-</script>
-</body>
-</html>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101827">
-<title>OpenLens Search | Creator Protection</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b1120;color:#f3f6ff;font-family:system-ui,sans-serif}
-header{text-align:center;padding:25px 16px 12px}
-.logo{font-size:35px;font-weight:850;letter-spacing:-1px}
-.logo span{color:#76e4c3}
-p{color:#b3bfd2;line-height:1.55}
-main{max-width:650px;margin:auto;padding:14px}
-.panel{background:#151f32;border:1px solid #293750;border-radius:18px;padding:19px;margin-bottom:15px}
+header{text-align:center;padding:24px 16px}
+.logo{font-size:35px;font-weight:850}.logo span{color:#76e4c3}
+p,.muted{color:#b3bfd2;line-height:1.5}
+main{max-width:680px;margin:auto;padding:12px}
+.panel{background:#151f32;border:1px solid #293750;border-radius:17px;padding:18px;margin-bottom:15px}
 h2{font-size:19px;margin:0 0 10px}
-.upload{display:block;border:2px dashed #536581;border-radius:14px;padding:22px 12px;text-align:center;cursor:pointer}
-input[type=file]{width:100%;margin-top:12px}
-#preview{display:none;width:100%;max-height:300px;object-fit:contain;margin-top:15px;border-radius:12px;background:#080d17}
-button,.link{display:block;width:100%;padding:13px;border:0;border-radius:11px;margin-top:10px;font-size:15px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer}
-button{background:#76e4c3;color:#092019}
-.link{background:#24334b;border:1px solid #394b67;color:#f3f6ff}
-button:disabled{opacity:.4}
-.check{display:flex;gap:10px;align-items:flex-start;margin:15px 0;color:#d5deec;line-height:1.5;font-size:14px}
-.check input{margin-top:5px;flex-shrink:0}
+input,textarea,select{width:100%;padding:12px;margin:7px 0;background:#0b1120;color:#f3f6ff;border:1px solid #40516c;border-radius:9px;font:inherit}
+button,.link{display:block;width:100%;padding:13px;border:0;border-radius:10px;margin-top:9px;font-size:15px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer}
+button{background:#76e4c3;color:#092019}.secondary,.link{background:#24334b;color:#f3f6ff;border:1px solid #394b67}
+.upload{display:block;border:2px dashed #536581;border-radius:13px;padding:20px;text-align:center}
+#preview{display:none;width:100%;max-height:300px;object-fit:contain;margin-top:12px;border-radius:10px}
+.check{display:flex;gap:10px;align-items:flex-start;margin:12px 0;color:#d5deec;font-size:14px}
+.check input{width:auto;margin-top:5px}
 .notice{font-size:13px;color:#aab7cc}
-#status{font-size:13px;color:#aab7cc}
-li{color:#d5deec;line-height:1.6;margin-bottom:7px}
-footer{text-align:center;color:#91a0b8;font-size:12px;padding:12px 18px 28px}
+.entry{border-top:1px solid #394b67;padding:12px 0;overflow-wrap:anywhere}
+.entry button{margin-top:7px}
+footer{text-align:center;color:#91a0b8;font-size:12px;padding:20px}
 </style>
 </head>
 <body>
 <header>
 <div class="logo">Open<span>Lens</span></div>
-<p>Reverse-image search and creator repost discovery</p>
+<p>Reverse-image search and creator repost investigation</p>
 </header>
 <main>
 <section class="panel">
-<h2>1. Select your image</h2>
-<p>Start with an image you own or are authorized to investigate. Preview it here before deciding whether to use an external service.</p>
-<label class="upload" for="photo">
-<strong>＋ Choose an image</strong><br>
-<span class="notice">Select a photo from your phone</span>
-</label>
+<h2>1. Select the image to investigate</h2>
+<p>Choose an image you own or are authorized to investigate.</p>
+<label class="upload" for="photo">Choose an image from your phone</label>
 <input id="photo" type="file" accept="image/*">
 <img id="preview" alt="Selected image preview">
-<button id="clear" hidden>Remove image</button>
-<p id="status" aria-live="polite">No image selected. Your photo is not uploaded by this page.</p>
+<p id="status" class="notice" aria-live="polite">No image selected. Nothing has been sent to a search service.</p>
+<button id="clear" class="secondary" hidden>Remove image</button>
 </section>
 
 <section class="panel">
-<h2>2. Choose a search service</h2>
-<p>Open a service to look for visually similar images or public webpages. You may need to upload your image again on that service.</p>
+<h2>2. Search for possible copies</h2>
+<p>Select a service below. OpenLens will open its website, but most services require you to upload the image again there. Your selected image is not automatically transferred.</p>
 <label class="check">
 <input id="consent" type="checkbox">
-<span>I understand that an external service may receive my image or search activity if I submit it there. I choose when to share it.</span>
+<span>I understand the external service may receive the image if I upload it there, and I choose to continue.</span>
 </label>
-<p class="notice">OpenLens does not automatically send your selected image to these services. Check each service's privacy terms before submitting sensitive content.</p>
-<a class="link external" href="https://lens.google.com/">Google Lens ↗</a>
-<a class="link external" href="https://images.google.com/">Google Images ↗</a>
-<a class="link external" href="https://www.bing.com/visualsearch">Bing Visual Search ↗</a>
-<a class="link external" href="https://tineye.com/">TinEye ↗</a>
-<p class="notice">External services set their own rules and results. Adult content may be restricted, and no service can guarantee finding every repost.</p>
+<button class="search" data-url="https://lens.google.com/">Continue to Google Lens</button>
+<button class="search secondary" data-url="https://www.bing.com/visualsearch">Continue to Bing Visual Search</button>
+<button class="search secondary" data-url="https://tineye.com/">Continue to TinEye</button>
+<p id="searchStatus" class="notice" aria-live="polite">Choose an image first, then select a search service.</p>
+<p class="notice">These services have their own policies and limitations. Adult content may be restricted. OpenLens cannot guarantee that a match will be found.</p>
 </section>
 
 <section class="panel">
-<h2>3. If you find a possible repost</h2>
-<ul>
-<li>Record the webpage address and date you found it.</li>
-<li>Keep relevant evidence securely, without redistributing intimate images.</li>
-<li>Check the website's reporting process and request removal where appropriate.</li>
-<li>If intimate imagery was shared without consent, use the platform's non-consensual intimate imagery reporting option when available.</li>
-</ul>
-</section>
-
-<section class="panel">
-<h2>4. What's coming next</h2>
-<ul>
-<li>Local duplicate-image comparison</li>
-<li>Perceptual hashes for resized or compressed copies</li>
-<li>Tools to organize found URLs and report status</li>
-<li>More privacy controls</li>
-</ul>
-<p class="notice">These matching and tracking features are planned, not implemented in this version. OpenLens currently provides image preview and external search shortcuts.</p>
+<h2>3. Repost investigation tracker</h2>
+<p>Record webpages where you find possible copies. Entries are saved only in this browser on this device; clearing browser data may erase them.</p>
+<input id="sourceUrl" type="url" placeholder="URL of the possible repost">
+<input id="foundDate" type="date" aria-label="Date found">
+<select id="caseStatus" aria-label="Investigation status">
+<option value="Needs review">Needs review</option>
+<option value="Reported">Reported</option>
+<option value="Removal requested">Removal requested</option>
+<option value="Resolved">Resolved</option>
+</select>
+<textarea id="notes" rows="2" placeholder="Notes (optional; don't include sensitive details)"></textarea>
+<button id="saveCase">Save investigation entry</button>
+<div id="entries"></div>
+<p class="notice">Tracker entries are stored locally using this browser's storage. They are not uploaded to OpenLens or synchronized across devices.</p>
 </section>
 </main>
-<footer>OpenLens Search · Powered by GadgetsRiot · Privacy-conscious by design</footer>
+<footer>OpenLens Search · Powered by GadgetsRiot</footer>
 <script>
-const input=document.getElementById('photo');
-const preview=document.getElementById('preview');
-const clear=document.getElementById('clear');
-const status=document.getElementById('status');
-const consent=document.getElementById('consent');
-let objectUrl=null;
+const $=id=>document.getElementById(id);
+let imageUrl=null;
+const today=new Date();
+$('foundDate').value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
 
-input.addEventListener('change',()=>{
- const file=input.files&&input.files[0];
+$('photo').addEventListener('change',()=>{
+ const file=$('photo').files&&$('photo').files[0];
  if(!file)return;
- if(!file.type.startsWith('image/')){
-  status.textContent='Please choose a valid image.';
-  input.value='';
-  return;
- }
- if(objectUrl)URL.revokeObjectURL(objectUrl);
- objectUrl=URL.createObjectURL(file);
- preview.src=objectUrl;
- preview.style.display='block';
- clear.hidden=false;
- status.textContent='Selected: '+file.name+'. The image stays in this page unless you submit it elsewhere.';
+ if(!file.type.startsWith('image/')){$('status').textContent='Please choose an image file.';return;}
+ if(imageUrl)URL.revokeObjectURL(imageUrl);
+ imageUrl=URL.createObjectURL(file);
+ $('preview').src=imageUrl;
+ $('preview').style.display='block';
+ $('status').textContent='Selected: '+file.name+'. The image is previewed locally.';
+ $('searchStatus').textContent='Image selected. Choose a search service when ready.';
+ $('clear').hidden=false;
+});
+$('clear').addEventListener('click',()=>{
+ $('photo').value='';
+ $('preview').removeAttribute('src');
+ $('preview').style.display='none';
+ $('clear').hidden=true;
+ if(imageUrl)URL.revokeObjectURL(imageUrl);
+ imageUrl=null;
+ $('status').textContent='No image selected.';
+ $('searchStatus').textContent='Choose an image first, then select a search service.';
 });
 
-clear.addEventListener('click',()=>{
- input.value='';
- preview.removeAttribute('src');
- preview.style.display='none';
- clear.hidden=true;
- if(objectUrl)URL.revokeObjectURL(objectUrl);
- objectUrl=null;
- status.textContent='No image selected.';
-});
-
-document.querySelectorAll('.external').forEach(link=>{
- link.addEventListener('click',event=>{
-  event.preventDefault();
-  if(!consent.checked){
-   status.textContent='Please confirm the external-sharing notice before continuing.';
-   consent.focus();
+document.querySelectorAll('.search').forEach(button=>{
+ button.addEventListener('click',()=>{
+  if(!$('photo').files.length){
+   $('searchStatus').textContent='Choose an image first.';
    return;
   }
-  window.open(link.href,'_blank','noopener,noreferrer');
+  if(!$('consent').checked){
+   $('searchStatus').textContent='Please check the consent box before continuing.';
+   $('consent').focus();
+   return;
+  }
+  $('searchStatus').textContent='Opening the service. Follow its instructions to upload the image there if you choose.';
+  window.open(button.dataset.url,'_blank','noopener,noreferrer');
  });
 });
+
+function getEntries(){
+ try{return JSON.parse(localStorage.getItem('openlensCases')||'[]');}
+ catch(e){return [];}
+}
+function renderEntries(){
+ const root=$('entries');
+ root.replaceChildren();
+ getEntries().forEach((item,index)=>{
+  const div=document.createElement('div');div.className='entry';
+  const title=document.createElement('strong');title.textContent=item.status+' · '+item.date;
+  const url=document.createElement('p');url.textContent=item.url;
+  const note=document.createElement('p');note.textContent=item.notes||'No notes';
+  const del=document.createElement('button');del.className='secondary';del.textContent='Delete entry';
+  del.addEventListener('click',()=>{
+   const all=getEntries();all.splice(index,1);
+   localStorage.setItem('openlensCases',JSON.stringify(all));renderEntries();
+  });
+  div.append(title,url,note,del);root.append(div);
+ });
+}
+$('saveCase').addEventListener('click',()=>{
+ const url=$('sourceUrl').value.trim();
+ if(!url){alert('Enter the webpage URL first.');return;}
+ try{const parsed=new URL(url);if(!['http:','https:'].includes(parsed.protocol))throw new Error();}
+ catch(e){alert('Enter a valid webpage URL beginning with https://');return;}
+ const entries=getEntries();
+ entries.unshift({url,date:$('foundDate').value||'',status:$('caseStatus').value,notes:$('notes').value.trim()});
+ try{
+  localStorage.setItem('openlensCases',JSON.stringify(entries));
+  $('sourceUrl').value='';$('notes').value='';renderEntries();
+ }catch(e){alert('Browser storage is unavailable or full. Your entry was not saved.');}
+});
+renderEntries();
 </script>
 </body>
 </html>
